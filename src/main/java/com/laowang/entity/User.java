@@ -1,18 +1,34 @@
 package com.laowang.entity;
 
-/**
- * Created by Administrator on 2016/12/15.
- */
+import java.sql.Timestamp;
+
 public class User {
+
+    /**
+     * 新用户默认头像key
+     */
+    public static final String DEFAULT_AVATAR_NAME = "default-avatar.jpg";
+    /**
+     * 用户状态:未激活
+     */
+    public static final Integer USERSTATE_UNACTIVE = 0;
+    /**
+     * 用户状态:已激活（正常）
+     */
+    public static final Integer USERSTATE_ACTIVE = 1;
+    /**
+     * 用户状态:禁用
+     */
+    public static final Integer USERSTATE_DISABLED = 2;
+
     private Integer id;
     private String username;
     private String password;
     private String email;
     private String phone;
     private Integer state;
-    private String createtime;
+    private Timestamp createtime;
     private String avatar;
-
 
     public Integer getId() {
         return id;
@@ -62,11 +78,11 @@ public class User {
         this.state = state;
     }
 
-    public String getCreatetime() {
+    public Timestamp getCreatetime() {
         return createtime;
     }
 
-    public void setCreatetime(String createtime) {
+    public void setCreatetime(Timestamp createtime) {
         this.createtime = createtime;
     }
 

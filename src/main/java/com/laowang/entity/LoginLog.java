@@ -1,11 +1,13 @@
 package com.laowang.entity;
 
+import java.sql.Timestamp;
+
 /**
  * Created by Administrator on 2016/12/15.
  */
 public class LoginLog {
     private Integer id;
-    private String logintime;
+    private Timestamp logintime;
     private String ip;
     private Integer username;
 
@@ -17,11 +19,11 @@ public class LoginLog {
         this.id = id;
     }
 
-    public String getLogintime() {
+    public Timestamp getLogintime() {
         return logintime;
     }
 
-    public void setLogintime(String logintime) {
+    public void setLogintime(Timestamp logintime) {
         this.logintime = logintime;
     }
 

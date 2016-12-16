@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.laowang.dao.UserDao;
 import com.laowang.entity.User;
+import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import com.laowang.util.EmailUtil;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -43,6 +44,13 @@ public User findByEmail(String email) {
     }
 
 
+    /**
+     * 新用户注册
+     * @param username
+     * @param password
+     * @param email
+     * @param phone
+     */
     public void saveNewUser(String username, String password, String email, String phone) {
         User user = new User();
         user.setUsername(username);
@@ -71,5 +79,28 @@ public User findByEmail(String email) {
         thread.start();
 
 
+    }
+
+    /**
+     * 根据token激活对应的账户
+     * @param token
+     */
+    public void activeUser(String token) {
+        String userName = cache.getIfPresent(token);
+        if(userName == null){
+            throw new ServiceException("token无效或已过期");
+        }else{
+            User user = userDao.FindByUserName(userName);
+            if(user == null){
+                throw new ServiceException("无法找到对应的账号");
+            }else{
+                user.setState(user.USERSTATE_ACTIVE);
+                userDao.update(user);
+
+                //删除对应的缓存token
+                cache.invalidate(token);
+            }
+
+        }
     }
 }

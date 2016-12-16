@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
  */
 public class UserDao {
 
-    public Object FindByUserName(String name) {
+    public User FindByUserName(String name) {
         String sql = "select*from t_user where username = ?";
         return DbHelp.query(sql,new BeanHandler<>(User.class),name);
     }
@@ -23,4 +23,9 @@ public class UserDao {
         DbHelp.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getPhone(),user.getState(),user.getAvatar());
     }
 
+
+    public void update(User user) {
+        String sql = "update t_user set password=? , email=? , phone=? , state=? , avatar=? where id = ?";
+        DbHelp.update(sql,user.getUsername(),user.getEmail(),user.getPhone(),user.getState(),user.getAvatar(),user.getId());
+    }
 }

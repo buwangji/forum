@@ -29,11 +29,7 @@ public class RegServlet extends BaseServlet{
         String phone = req.getParameter("phone");
         Map<String,Object> result = Maps.newHashMap();
 
-        UserService userService = new UserService();
-        userService.saveNewUser(username, password, email, phone);
-
-        result.put("state","success");
-        /*try {
+        try {
             UserService userService = new UserService();
             userService.saveNewUser(username, password, email, phone);
 
@@ -42,7 +38,7 @@ public class RegServlet extends BaseServlet{
             ex.printStackTrace();
             result.put("state","error");
             result.put("message","注册失败，请稍后再试");
-        }*/
+        }
 
         renderJSON(result,resp);
 

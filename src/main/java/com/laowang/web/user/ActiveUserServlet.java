@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Created by Administrator on 2016/12/16.
  */
-@WebServlet("user/active")
+@WebServlet("/user/active")
 public class ActiveUserServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

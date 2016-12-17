@@ -10,7 +10,7 @@ public class LoginLogDao {
 
 
     public void save(LoginLog loginLog) {
-        String sql = "insert into t_login_log(id,userid) values(?,?)";
-        DbHelp.update(sql,loginLog.getId(),loginLog.getUserId());
+        String sql = "insert into t_login_log(ip,userid) values(?,?)";
+        DbHelp.update(sql,loginLog.getIp(),loginLog.getUserId());
     }
 }

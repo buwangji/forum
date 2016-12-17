@@ -114,7 +114,7 @@ public User findByEmail(String email) {
     //用户登录
     public User login(String username, String password, String ip) {
         User user = userDao.FindByUserName(username);
-        if(user == null && DigestUtils.md5Hex(Config.get("user.password.salt")+password).equals(user.getPassword())){
+        if(user != null && DigestUtils.md5Hex(Config.get("user.password.salt")+password).equals(user.getPassword())){
             if(user.getState().equals(User.USERSTATE_ACTIVE)){
                 //记录登录日志
                 LoginLog loginLog = new LoginLog();

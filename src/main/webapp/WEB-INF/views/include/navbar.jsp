@@ -24,7 +24,7 @@
                 <a href="setting.html"><i class="fa fa-cog"></i></a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-sign-out"></i></a>
+                <a href="/logout"><i class="fa fa-sign-out"></i></a>
             </li>
             </c:when>
             <c:otherwise>

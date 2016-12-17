@@ -1,15 +1,14 @@
 package com.laowang.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Created by Administrator on 2016/12/15.
- */
-public class LoginLog {
+public class LoginLog implements Serializable{
+
     private Integer id;
-    private Timestamp logintime;
+    private Timestamp loginTime;
     private String ip;
-    private Integer username;
+    private Integer userId;
 
     public Integer getId() {
         return id;
@@ -19,12 +18,12 @@ public class LoginLog {
         this.id = id;
     }
 
-    public Timestamp getLogintime() {
-        return logintime;
+    public Timestamp getLoginTime() {
+        return loginTime;
     }
 
-    public void setLogintime(Timestamp logintime) {
-        this.logintime = logintime;
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
     }
 
     public String getIp() {
@@ -35,11 +34,15 @@ public class LoginLog {
         this.ip = ip;
     }
 
-    public Integer getUsername() {
-        return username;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUsername(Integer username) {
-        this.username = username;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
+
+
+
+

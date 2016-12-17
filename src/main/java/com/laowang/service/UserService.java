@@ -2,25 +2,32 @@ package com.laowang.service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.laowang.dao.LoginLogDao;
 import com.laowang.dao.UserDao;
+import com.laowang.entity.LoginLog;
 import com.laowang.entity.User;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import com.laowang.util.EmailUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.sun.corba.se.impl.util.RepositoryId.cache;
+
 
 /**
  * Created by Administrator on 2016/12/16.
  */
 public class UserService {
     private UserDao userDao = new UserDao();
+    private LoginLogDao loginLogDao = new LoginLogDao();
+
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
     //发送激活邮件的TOKEN缓存
     private static Cache<String,String> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(6, TimeUnit.HOURS)
@@ -103,4 +110,27 @@ public User findByEmail(String email) {
 
         }
     }
+
+    //用户登录
+    public User login(String username, String password, String ip) {
+        User user = userDao.FindByUserName(username);
+        if(user == null && DigestUtils.md5Hex(Config.get("user.password.salt")+password).equals(user.getPassword())){
+            if(user.getState().equals(User.USERSTATE_ACTIVE)){
+                //记录登录日志
+                LoginLog loginLog = new LoginLog();
+                loginLog.setIp(ip);
+                loginLog.setUserId(user.getId());
+                loginLogDao.save(loginLog);
+                logger.info("{}登陆了系统,ip为{}",username,ip);
+                return  user;
+            }else if(User.USERSTATE_UNACTIVE.equals(user.getState())){
+                throw new ServiceException("该账号未被激活");
+            }else{
+                throw new ServiceException("该账号已被禁用");
+            }
+        }else{
+            throw new ServiceException("账号或密码错误");
+        }
+    }
+
 }

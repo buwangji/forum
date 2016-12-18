@@ -33,8 +33,8 @@ $(function () {
                     $("#logbtn").text("登录中...").attr("disabled","disabled");
                 },
                 success:function (data) {
-                    if(data.state == "success"){
-                        alert("成功登录");
+                    if(data.state == 'success'){
+                        alert("注册成功,请去邮箱激活");
                         window.location.href = "/home";
                     }else{
                         alert(data.message);

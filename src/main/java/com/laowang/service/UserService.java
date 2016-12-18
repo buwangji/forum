@@ -9,6 +9,7 @@ import com.laowang.entity.User;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import com.laowang.util.EmailUtil;
+import com.laowang.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,14 @@ public class UserService {
     //发送激活邮件的TOKEN缓存
     private static Cache<String,String> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(6, TimeUnit.HOURS)
+            .build();
+    //发送找回密码的token缓存
+    private static Cache<String ,String> passwordCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(30,TimeUnit.MINUTES)
+            .build();
+    //限制操作频率的缓存
+    private  static Cache<String ,String> sessionCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(59,TimeUnit.SECONDS)
             .build();
 
     /**
@@ -133,4 +142,76 @@ public User findByEmail(String email) {
         }
     }
 
+    /**
+     * 找回密码
+     * @param sessionid 客户端的session,限制客户端的操作频率
+     * @param type 找回密码的方式
+     * @param value 电子邮件或手机号码
+     */
+    public void foundpassword(String sessionid, String type, String value) {
+        if(sessionCache.getIfPresent(sessionid) == null){
+            if("phone".equals(type)){
+                //TODO 根据手机号码找回密码
+            }else if("email".equals(type)){
+                User user = userDao.findByEmail(value);
+                if(user != null){
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String uuid = UUID.randomUUID().toString();
+                            String url = "http://www.laowang.com/foundpassword/newpassword?token=" + uuid;
+
+                            passwordCache.put(uuid,user.getUsername());
+                            String html = user.getUsername()+"<br>请点击该<a href='"+url+"'>链接</a>进行找回密码操作，链接在30分钟内有效";
+                            EmailUtil.sendEmail(value,"密码找回邮件",html);
+                        }
+                    });
+                    thread.start();
+                }
+            }
+            sessionCache.put(sessionid,"提交频率");
+        }else{
+            throw new ServiceException("操作频率过快,请稍后再试");
+        }
+
+
+    }
+
+    /**
+     * 根据链接中的token来寻找用户
+     * @param token 找回密码需要的token
+     * @return
+     */
+    public User foundpasswordbytoken(String token) {
+        String username = passwordCache.getIfPresent(token);
+        if(StringUtils.isEmpty(username)){
+            throw new ServiceException("token过期无效");
+        }else {
+            User user = userDao.FindByUserName(username);
+            if(user == null){
+                throw new ServiceException("无法找到该账号");
+            }else{
+                return user;
+            }
+
+        }
+
+    }
+
+    /**
+     * 根据链接中的token来重置密码
+     * @param id 用户id
+     * @param token 链接中的token
+     * @param password 新密码
+     */
+    public void resetPassword(String id, String token, String password) {
+        if(passwordCache.getIfPresent(token) == null){
+            throw new ServiceException("token过期无效");
+        }else{
+            User user = userDao.findByid(Integer.valueOf(id));
+            user.setPassword(DigestUtils.md5Hex(Config.get("user.password.salt")+password));
+            userDao.update(user);
+            logger.info("{}重置了密码",user.getUsername());
+        }
+    }
 }

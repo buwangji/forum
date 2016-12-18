@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class EmailUtil {
 
     private static Logger logger = LoggerFactory.getLogger(EmailUtil.class);
-    public static void sendEmail(String toAddress,String subject,String conte){
+    public static void sendEmail(String toAddress,String subject,String context){
         HtmlEmail htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(Config.get("email.smpt"));
         htmlEmail.setSmtpPort(Integer.valueOf(Config.get("email.port")));
@@ -22,8 +22,7 @@ public class EmailUtil {
         try {
             htmlEmail.setFrom(Config.get("email.frommail"));
             htmlEmail.setSubject(subject);
-            htmlEmail.setHtmlMsg(conte);
-            //htmlEmail.setHtmlMsg(context);
+            htmlEmail.setHtmlMsg(context);
             htmlEmail.addTo(toAddress);
             htmlEmail.send();
 

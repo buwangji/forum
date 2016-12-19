@@ -245,5 +245,13 @@ public User findByEmail(String email) {
 
     }
 
-
+    /**
+     * 修改头像
+     * @param user
+     * @param fileKey
+     */
+    public void updateAvatar(User user, String fileKey) {
+        user.setAvatar(fileKey);
+        userDao.update(user);
+    }
 }

@@ -26,6 +26,9 @@
           <element id="library" level="project" name="Maven: org.apache.commons:commons-email:1.4" />
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.2" />
           <element id="library" level="project" name="Maven: javax.activation:activation:1.1.1" />
+          <element id="library" level="project" name="Maven: com.qiniu:qiniu-java-sdk:7.1.0" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.2.0" />
+          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.6.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

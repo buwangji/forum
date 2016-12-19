@@ -34,7 +34,7 @@ $(function () {
                 },
                 success:function (data) {
                     if(data.state == 'success'){
-                        alert("注册成功,请去邮箱激活");
+                        alert("成功登录");
                         window.location.href = "/home";
                     }else{
                         alert(data.message);

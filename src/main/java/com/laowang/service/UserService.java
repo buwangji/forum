@@ -211,7 +211,39 @@ public User findByEmail(String email) {
             User user = userDao.findByid(Integer.valueOf(id));
             user.setPassword(DigestUtils.md5Hex(Config.get("user.password.salt")+password));
             userDao.update(user);
+            //删除token
+            passwordCache.invalidate(token);
             logger.info("{}重置了密码",user.getUsername());
         }
     }
+
+    /**
+     * 修改用户的邮箱
+     * @param user
+     * @param email
+     */
+    public void updateEmail(User user, String email) {
+        user.setEmail(email);
+        userDao.update(user);
+    }
+
+    /**
+     * 修改用户的密码
+     * @param user
+     * @param oldPassword
+     * @param newPassword
+     */
+    public void updatePaasword(User user, String oldPassword, String newPassword) {
+        String salt = Config.get("user.password.salt");
+        if(DigestUtils.md5Hex(salt + oldPassword).equals(user.getPassword())) {
+            newPassword = DigestUtils.md5Hex(salt + newPassword);
+            user.setPassword(newPassword);
+            userDao.update(user);
+        } else {
+            throw new ServiceException("原始密码错误");
+        }
+
+    }
+
+
 }

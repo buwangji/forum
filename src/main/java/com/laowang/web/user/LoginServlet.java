@@ -21,6 +21,8 @@ import java.util.Map;
 public class LoginServlet extends BaseServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //判断当前是否有用户
+        req.getSession().getAttribute("curr_user");
         forward("user/login.jsp",req,resp);
     }
 

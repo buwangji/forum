@@ -3,6 +3,7 @@ package com.laowang.util;
 import com.laowang.exception.DataAccessException;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,18 @@ public class DbHelp {
             throw new DataAccessException("执行"+ sql + "异常",e);
         }
     }
+
+    public static Integer insert(String sql,Object... params) throws DataAccessException {
+        try {
+            QueryRunner queryRunner = new QueryRunner(ConnectionManager.getDataSource());
+            logger.debug("SQL: {}",sql);
+            return queryRunner.insert(sql,new ScalarHandler<Long>(),params).intValue();
+        } catch (SQLException ex) {
+            logger.error("执行{}异常",sql);
+            throw new DataAccessException("执行"+ sql + "异常",ex);
+        }
+    }
+
 
     private static void close(Connection connection) {
         if(connection != null) {

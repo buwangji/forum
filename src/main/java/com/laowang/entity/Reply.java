@@ -1,0 +1,54 @@
+package com.laowang.entity;
+
+import java.sql.Timestamp;
+
+/**
+ * Created by Administrator on 2016/12/22.
+ */
+public class Reply {
+    private Integer id;
+    private String content;
+    private Integer userid;
+    private Integer topicid;
+    private Timestamp createtime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Integer getTopicid() {
+        return topicid;
+    }
+
+    public void setTopicid(Integer topicid) {
+        this.topicid = topicid;
+    }
+
+    public Timestamp getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Timestamp createtime) {
+        this.createtime = createtime;
+    }
+}

@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2016/12/21
-  Time: 9:36
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,17 +149,27 @@
         </div>
 
     </div>
+    <c:choose>
+        <c:when test="${not empty sessionScope.curr_user}">
+            <div class="box" style="margin:20px 0px;">
+                <div class="talk-item muted" style="font-size: 12px"><i class="fa fa-plus"></i> 添加一条新回复</div>
+                <form action="/newreply" method="post" id="replyForm" style="padding: 15px;margin-bottom:0px;">
+                    <input name="topicid" type="hidden" value="${topic.id}">
+                    <textarea name="content" id="editor"></textarea>
+                </form>
+                <div class="talk-item muted" style="text-align: right;font-size: 12px">
+                    <span class="pull-left">请尽量让自己的回复能够对别人有帮助回复</span>
+                    <button  id="replyBtn" class="btn btn-primary">发布</button>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="box" style="margin:20px 0px;">
+                <div class="talk-item">请<a href="/login?redirect=topicDetail?topicid=${topic.id}#reply">登录</a>后再回复</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
-    <div class="box" style="margin:20px 0px;">
-        <div class="talk-item muted" style="font-size: 12px"><i class="fa fa-plus"></i> 添加一条新回复</div>
-        <form action="" style="padding: 15px;margin-bottom:0px;">
-            <textarea name="" id="editor"></textarea>
-        </form>
-        <div class="talk-item muted" style="text-align: right;font-size: 12px">
-            <span class="pull-left">请尽量让自己的回复能够对别人有帮助回复</span>
-            <button class="btn btn-primary">发布</button>
-        </div>
-    </div>
 
 </div>
 <!--container end-->
@@ -180,6 +184,9 @@
             textarea: $('#editor'),
             toolbar:false
             //optional options
+        });
+        $("#replyBtn").click(function () {
+            $("#replyForm").submit();
         });
     });
 </script>

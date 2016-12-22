@@ -1,9 +1,11 @@
 package com.laowang.service;
 
 import com.laowang.dao.NodeDao;
+import com.laowang.dao.ReplyDao;
 import com.laowang.dao.TopicDao;
 import com.laowang.dao.UserDao;
 import com.laowang.entity.Node;
+import com.laowang.entity.Reply;
 import com.laowang.entity.Topic;
 import com.laowang.entity.User;
 import com.laowang.exception.ServiceException;
@@ -18,6 +20,7 @@ public class TopicService {
     TopicDao topicDao = new TopicDao();
     NodeDao nodeDao = new NodeDao();
     UserDao userDao = new UserDao();
+    ReplyDao replyDao = new ReplyDao();
 
     //获取nodelist
     public List<Node> findAllNode() {
@@ -57,5 +60,20 @@ public class TopicService {
         }else{
             throw new ServiceException("参数错误");
         }
+    }
+
+    /**
+     * 添加新的回复
+     * @param topicid
+     * @param content
+     * @param user
+     */
+    public void addNewTopicReply(String topicid, String content, User user) {
+        Reply reply = new Reply();
+        reply.setContent(content);
+        reply.setUserid(user.getId());
+        reply.setTopicid(Integer.valueOf(topicid));
+        replyDao.addReply(reply);
+
     }
 }

@@ -19,7 +19,12 @@ public class NodeDao {
 
     public Node findById(Integer nodeid) {
         String sql = "select * from t_node where id = ?";
-        return DbHelp.query(sql,new BeanHandler<Node>(Node.class),nodeid);
+        return DbHelp.query(sql,new BeanHandler<>(Node.class),nodeid);
 
+    }
+
+    public void update(Node node) {
+        String sql = "update t_node set topicnum = ? , nodename = ? where id = ?  ";
+        DbHelp.update(sql,node.getTopicnum(),node.getNodename(),node.getId());
     }
 }

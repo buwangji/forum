@@ -1,5 +1,6 @@
 package com.laowang.web.topic;
 
+import com.laowang.entity.Reply;
 import com.laowang.entity.Topic;
 import com.laowang.service.TopicService;
 import com.laowang.web.BaseServlet;
@@ -9,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/21.
@@ -22,6 +24,10 @@ public class TopicDetailServlet extends BaseServlet {
         TopicService topicService = new TopicService();
         try{
             Topic topic = topicService.findTopicById(topicid);
+            //获取topicid对应的回复列表replyList
+            List<Reply> replyList = topicService.findReplyListByTopicid(topicid);
+            req.setAttribute("replyList",replyList);
+
             req.setAttribute("topic",topic);
             forward("topic/topicdetail.jsp",req,resp);
         }catch (ServletException e){

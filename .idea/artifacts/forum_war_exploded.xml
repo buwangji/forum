@@ -29,6 +29,7 @@
           <element id="library" level="project" name="Maven: com.qiniu:qiniu-java-sdk:7.1.0" />
           <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.2.0" />
           <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.6.0" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.9.4" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -47,8 +47,17 @@ $(function () {
                 },
                 success:function (data) {
                     if(data.state == 'success'){
-                        alert("成功登录");
-                        window.location.href = "/home";
+                        var url = getParameterByName("redirect");
+                        if(url){
+                            var hash = location.hash;
+                            if(hash){
+                                window.location.href = url + hash;
+                            }else{
+                                window.location.href = url;
+                            }
+                        }else{
+                            window.location.href = "/home";
+                        }
                     }else{
                         alert(data.message);
                     }

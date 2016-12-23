@@ -1,6 +1,7 @@
 package com.laowang.web.topic;
 
 import com.laowang.entity.User;
+import com.laowang.exception.ServiceException;
 import com.laowang.service.TopicService;
 import com.laowang.util.StringUtils;
 import com.laowang.web.BaseServlet;
@@ -24,7 +25,11 @@ public class NewReplyServlet extends BaseServlet {
         User user = (User) req.getSession().getAttribute("curr_user");
         TopicService service = new TopicService();
         if(StringUtils.isNumeric(topicid)){
-            service.addNewTopicReply(topicid,content,user);
+            try {
+                service.addNewTopicReply(topicid,content,user);
+            }catch (ServiceException e){
+                resp.sendError(404,e.getMessage());
+            }
         }else{
             resp.sendError(404);
         }

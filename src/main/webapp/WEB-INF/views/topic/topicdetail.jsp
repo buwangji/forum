@@ -38,14 +38,24 @@
           ${requestScope.topic.content}
         </div>
         <div class="topic-toolbar">
-            <ul class="unstyled inline pull-left">
-                <li><a href="">加入收藏</a></li>
-                <li><a href="">感谢</a></li>
-                <li><a href=""></a></li>
-            </ul>
+           <c:if test="${not empty sessionScope.curr_user}">
+               <ul class="unstyled inline pull-left">
+                   <c:choose>
+                       <c:when test="${not empty fav}">
+                           <li><a href="javascript:;" id="favtopic">取消收藏</a></li>
+                       </c:when>
+                       <c:otherwise>
+                           <li><a href="javascript:;" id="favtopic">加入收藏</a></li>
+                       </c:otherwise>
+                   </c:choose>
+
+                   <li><a href="">感谢</a></li>
+                   <li><a href="">删除</a></li>
+               </ul>
+           </c:if>
             <ul class="unstyled inline pull-right muted">
                 <li>${topic.clicknum}次点击</li>
-                <li>${topic.favnum}人收藏</li>
+                <li><span id="topicfav">${topic.favnum}</span>人收藏</li>
                 <li>${topic.thankyounum}人感谢</li>
             </ul>
         </div>
@@ -65,7 +75,7 @@
                            <img class="avatar" src="${reply.user.avatar}?imageView2/1/w/40/h/40" alt="">
                        </td>
                        <td width="auto">
-                           <a href="" style="font-size: 12px">${reply.user.username}</a> <span style="font-size: 12px" class="reply">4小时前</span>
+                           <a href="" style="font-size: 12px">${reply.user.username}</a> <span style="font-size: 12px" class="reply">${reply.createtime}</span>
                            <br>
                            <p style="font-size: 14px">${reply.content}</p>
                        </td>
@@ -113,26 +123,51 @@
 <script src="//cdn.bootcss.com/moment.js/2.10.6/locale/zh-cn.js"></script>
 <script>
     $(function(){
-        var editor = new Simditor({
-            textarea: $('#editor'),
-            toolbar:false
-            //optional options
-        });
+        <c:if test="${not empty sessionScope.curr_user}">
+            var editor = new Simditor({
+                textarea: $('#editor'),
+                toolbar:false
+                //optional options
+                });
+            $(".replyLink").click(function(){
+                var count = $(this).attr("rel");
+                var html = "<a href='#reply"+count+"'>#"+ count +"</a>";
+                editor.setValue(html + editor.getValue());
+                window.location.href="#reply";
+            });
+        </c:if>
         $("#replyBtn").click(function () {
             $("#replyForm").submit();
         });
+        $("#favtopic").click(function () {
+            var $this = $(this);
+            var action = "";
+            if($this.text() == "加入收藏"){
+                action = "fav";
+            }else if($this.text() == "取消收藏"){
+                action = "unfav";
+            }
+            $.post("/topicfav",{"topicid":${topic.id},"action":action}).done(function (json) {
+                if(json.state == "success"){
+                    if(action == "fav"){
+                        $this.text("取消收藏");
+                    }else if(action == "unfav"){
+                        $this.text("加入收藏");
+                    }
+                    $("#topicfav").text(json.data);
+                }
+            }).error(function () {
+                alert("服务器错误");
+            });
+        });
+
         $("#lastreplytime").text(moment($("#lastreplytime").text()).format("YYYY年MM月DD日 HH:mm:ss"));
         $("#topicTime").text(moment($("#topicTime").text()).fromNow());
         $(".reply").text(function () {
             var time = $(this).text();
             return moment(time).fromNow();
         });
-        $(".replyLink").click(function(){
-            var count = $(this).attr("rel");
-            var html = "<a href='#reply"+count+"'>#"+ count +"</a>";
-            editor.setValue(html + editor.getValue());
-            window.location.href="#reply";
-        });
+
 
     });
 </script>

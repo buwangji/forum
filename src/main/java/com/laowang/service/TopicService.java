@@ -1,13 +1,7 @@
 package com.laowang.service;
 
-import com.laowang.dao.NodeDao;
-import com.laowang.dao.ReplyDao;
-import com.laowang.dao.TopicDao;
-import com.laowang.dao.UserDao;
-import com.laowang.entity.Node;
-import com.laowang.entity.Reply;
-import com.laowang.entity.Topic;
-import com.laowang.entity.User;
+import com.laowang.dao.*;
+import com.laowang.entity.*;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.StringUtils;
 import org.joda.time.DateTime;
@@ -23,6 +17,7 @@ public class TopicService {
     NodeDao nodeDao = new NodeDao();
     UserDao userDao = new UserDao();
     ReplyDao replyDao = new ReplyDao();
+    FavDao favDao = new FavDao();
 
     //获取nodelist
     public List<Node> findAllNode() {
@@ -66,9 +61,7 @@ public class TopicService {
                 Node node = nodeDao.findById(topic.getNodeid());
                 topic.setUser(user);
                 topic.setNode(node);
-                //更新topic表中的clicknum
-                topic.setClicknum(topic.getClicknum()+1);
-                topicDao.update(topic);
+
                 return topic;
             }else{
                 throw new ServiceException("该贴不存在或已被删除");
@@ -107,4 +100,32 @@ public class TopicService {
     public List<Reply> findReplyListByTopicid(String topicid) {
         return replyDao.findListByTopicId(topicid);
     }
+
+    public Fav findFavById(String topicid, User user) {
+        return favDao.findFavById(Integer.valueOf(topicid),user.getId());
+    }
+
+    public void addFavTopic(String topicid, User user) {
+        Fav fav = new Fav();
+        fav.setTopicid(Integer.valueOf(topicid));
+        fav.setUserid(user.getId());
+        favDao.addFav(fav);
+        //topic表中favnum+1
+        Topic topic = topicDao.findTopicById(topicid);
+        topic.setFavnum(topic.getFavnum() + 1);
+        topicDao.update(topic);
+
+    }
+
+    public void unFavTopic(String topicid, User user) {
+        favDao.delFav(topicid,user.getId());
+        //topic表中favnum-1
+        Topic topic = topicDao.findTopicById(topicid);
+        topic.setFavnum(topic.getFavnum() - 1);
+        topicDao.update(topic);
+    }
+    public void updateTopic(Topic topic) {
+        topicDao.update(topic);
+    }
+
 }

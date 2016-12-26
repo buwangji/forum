@@ -13,6 +13,11 @@ $(function () {
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
+    $("#password").keydown(function () {
+        if(event.keyCode == '13'){
+            $("#logbtn").click();
+        }
+    });
 
 
     $("#logbtn").click(function () {

@@ -1,12 +1,15 @@
 package com.laowang.service;
 
+import com.google.common.collect.Maps;
 import com.laowang.dao.*;
 import com.laowang.entity.*;
 import com.laowang.exception.ServiceException;
+import com.laowang.util.Page;
 import com.laowang.util.StringUtils;
 import org.joda.time.DateTime;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,6 +35,8 @@ public class TopicService {
         topic.setContent(content);
         topic.setNodeid(nodeid);
         topic.setUserid(userid);
+        //设置最后回复时间为当前时间
+        topic.setLastreplytime(new Timestamp(new DateTime().getMillis()));
         Integer topicId = topicDao.save(topic);
         topic.setId(topicId);
         System.out.println(nodeid);
@@ -128,4 +133,21 @@ public class TopicService {
         topicDao.update(topic);
     }
 
+    public Page<Topic> findAllTopic(String nodeid, Integer pageNo) {
+        int count = 0;
+        List<Topic> topicList = null;
+        if(StringUtils.isEmpty(nodeid)){
+            count = topicDao.count();
+            Page<Topic> topicPage = new Page<>(count,pageNo);
+            topicList = topicDao.findAllByPage(topicPage.getStart(),topicPage.getPageSize());
+            topicPage.setItems(topicList);
+            return  topicPage;
+        }else{
+            count = topicDao.count(nodeid);
+            Page<Topic> topicPage = new Page<>(count,pageNo);
+            topicList = topicDao.findAllByPage(nodeid,topicPage.getStart(),topicPage.getPageSize());
+            topicPage.setItems(topicList);
+            return  topicPage;
+        }
+    }
 }

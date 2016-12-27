@@ -64,11 +64,18 @@ $(function () {
                             window.location.href = "/home";
                         }
                     }else{
-                        alert(data.message);
+                        //alert(data.message);
+                        swal({
+                            title: data.message,
+                            //text: data.message,
+                            imageUrl: "/static/img/error.png" });
                     }
                 },
                 error:function () {
-                    alert("服务器错误");
+                    swal({
+                        title: "服务器错误",
+                        //text: "服务器错误",
+                        imageUrl: "/static/img/error.png" });
                 },
                 complete:function () {
                     $("#logbtn").text("登录").removeAttr("disabled");

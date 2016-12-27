@@ -97,11 +97,19 @@ $(function () {
                         alert("密码修改成功，请重新登录");
                         window.location.href = "/login";
                     } else {
-                        alert(data.message);
+                        //alert(data.message);
+                        swal({
+                            title: data.message,
+                            //text: "头像设置失败",
+                            imageUrl: "/static/img/error.png" });
                     }
                 },
                 error:function(){
-                    alert("服务器错误");
+                    //alert("服务器错误");
+                    swal({
+                        title:"服务器错误",
+                        //text: "头像设置失败",
+                        imageUrl: "/static/img/error.png" });
                 },
                 complete:function(){
                     $("#passwordBtn").text("保存").removeAttr("disabled");

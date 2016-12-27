@@ -3,17 +3,21 @@ package com.laowang.service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.laowang.dao.LoginLogDao;
+import com.laowang.dao.NotifyDao;
 import com.laowang.dao.UserDao;
 import com.laowang.entity.LoginLog;
+import com.laowang.entity.Notify;
 import com.laowang.entity.User;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import com.laowang.util.EmailUtil;
 import com.laowang.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class UserService {
     private UserDao userDao = new UserDao();
     private LoginLogDao loginLogDao = new LoginLogDao();
+    private NotifyDao notifyDao = new NotifyDao();
 
     private Logger logger = LoggerFactory.getLogger(UserService.class);
     //发送激活邮件的TOKEN缓存
@@ -253,5 +258,25 @@ public User findByEmail(String email) {
     public void updateAvatar(User user, String fileKey) {
         user.setAvatar(fileKey);
         userDao.update(user);
+    }
+
+    /**
+     * g根据user寻找notifyList
+     * @param user
+     * @return
+     */
+    public List<Notify> findNotifyListBy(User user) {
+        return notifyDao.findListByUserid(user.getId());
+
+    }
+
+    public void updateNotifyByids(String ids) {
+        String idArray[] = ids.split(",");
+        for(int i = 0 ; i < idArray.length;i++){
+            Notify notify = notifyDao.findById(idArray[i]);
+            notify.setState(Notify.NOTIFY_STATE_READ);
+            notify.setReadtime(new Timestamp(DateTime.now().getMillis()));
+            notifyDao.update(notify);
+        }
     }
 }

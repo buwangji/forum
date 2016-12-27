@@ -70,11 +70,19 @@ $(function () {
                         alert("注册成功,请去邮箱激活该账号");
                         window.location.href = "/login";
                     }else{
-                        alert(data.messages);
+                       // alert(data.messages);
+                        swal({
+                            title: data.message,
+                            //text: data.message,
+                            imageUrl: "/static/img/error.png" });
                     }
                 },
                 error:function () {
-                    alert("服务器错误");
+                   // alert("服务器错误");
+                    swal({
+                        title:"服务器错误",
+                        //text: data.message,
+                        imageUrl: "/static/img/error.png" });
                 },
                 complete:function () {
                     $("#regBtn").text("注册").removeAttr("disabled");

@@ -15,6 +15,7 @@
     <link href="http://cdn.bootcss.com/bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/js/uploader/webuploader.css">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/js/dist/sweetalert.css">
 </head>
 <body>
 <%@ include file="../include/navbar.jsp"%>
@@ -113,6 +114,7 @@
 <script src="/static/js/jquery.validate.min.js"></script>
 <script src="/static/js/uploader/webuploader.min.js"></script>
 <script src="/static/js/user/setting.js"></script>
+<script src="/static/js/dist/sweetalert.min.js"></script>
 <script>
     $(function(){
         //头像上传
@@ -142,13 +144,21 @@
                         $("#navbar_avatar").attr("src",url+"?imageView2/1/w/20/h/20");
                     }
                 }).error(function(){
-                alert("头像设置失败");
+                //alert("头像设置失败");
+                swal({
+                    title: "头像设置失败",
+                    //text: "头像设置失败",
+                    imageUrl: "/static/img/error.png" });
             });
         });
 
         //文件上传失败
         uploader.on('uploadError',function(){
-            alert("上传失败,请稍后再试");
+            //alert("上传失败,请稍后再试");
+            swal({
+                title: "上传失败,请稍后再试",
+                //text: "头像设置失败",
+                imageUrl: "/static/img/error.png" });
         });
     });
 

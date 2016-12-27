@@ -44,11 +44,19 @@ $(function(){
                         alert("密码重置成功,请登录");
                         window.location.href = "/login";
                     } else {
-                        alert(data.message);
+                        //alert(data.message);
+                        swal({
+                            title: data.message,
+                            //text: data.message,
+                            imageUrl: "/static/img/error.png" });
                     }
                 },
                 error:function(){
-                    alert("服务器错误");
+                    //alert("服务器错误");
+                    swal({
+                        title:"服务器错误",
+                        //text: data.message,
+                        imageUrl: "/static/img/error.png" });
                 },
                 complete:function(){
                     $("#resetBtn").text("保存").removeAttr("disabled");

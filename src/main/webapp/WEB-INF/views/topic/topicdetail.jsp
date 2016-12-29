@@ -26,7 +26,7 @@
 <div class="container">
     <div class="box">
         <ul class="breadcrumb" style="background-color: #fff;margin-bottom: 0px;">
-            <li><a href="#">首页</a> <span class="divider">/</span></li>
+            <li><a href="/home">首页</a> <span class="divider">/</span></li>
             <li class="active">${requestScope.topic.node.nodename}</li>
         </ul>
         <div class="topic-head">
@@ -50,7 +50,9 @@
                    </c:choose>
 
                    <li><a href="">感谢</a></li>
-                   <li><a href="">删除</a></li>
+                   <c:if test="${sessionScope.curr_user.id == topic.userid and topic.edit}">
+                       <li><a href="/topicedit?topicid=${topic.id}">编辑</a></li>
+                   </c:if>
                </ul>
            </c:if>
             <ul class="unstyled inline pull-right muted">
@@ -136,6 +138,7 @@
                 window.location.href="#reply";
             });
         </c:if>
+
         $("#replyBtn").click(function () {
             $("#replyForm").submit();
         });

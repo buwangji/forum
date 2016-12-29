@@ -159,4 +159,28 @@ public class TopicService {
             return  topicPage;
         }
     }
+
+    public void updateTopicById(String title, String content, String nodeid, String topicid) {
+        Topic topic = topicDao.findTopicById(topicid);
+        Integer oldNodeid = topic.getNodeid();
+        if(topic.isEdit()){
+            //更新topic
+            topic.setTitle(title);
+            topic.setContent(content);
+            topic.setNodeid(Integer.valueOf(nodeid));
+            topicDao.update(topic);
+            if(oldNodeid != Integer.valueOf(nodeid)){
+                //更新node表
+                Node oldNode = nodeDao.findById(oldNodeid);
+                oldNode.setTopicnum(oldNode.getTopicnum() - 1);
+                nodeDao.update(oldNode);
+                Node newNode = nodeDao.findById(Integer.valueOf(nodeid));
+                newNode.setTopicnum(newNode.getTopicnum()+1);
+                nodeDao.update(newNode);
+            }
+        }else{
+            throw new ServiceException("该帖已经不可编辑");
+        }
+
+    }
 }

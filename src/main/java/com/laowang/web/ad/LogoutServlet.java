@@ -1,4 +1,4 @@
-package com.laowang.web.user;
+package com.laowang.web.ad;
 
 import com.laowang.web.BaseServlet;
 
@@ -9,16 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Created by Administrator on 2016/12/17.
- */
-@WebServlet("/logout")
+@WebServlet("/ad/loginout")
 public class LogoutServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.invalidate();
-        req.setAttribute("message","你已经安全退出");
-        forward("user/login.jsp",req,resp);
+        //req.setAttribute("message","你已经安全退出");
+        forward("ad/login.jsp",req,resp);
     }
 }

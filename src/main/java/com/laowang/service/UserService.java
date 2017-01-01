@@ -11,6 +11,7 @@ import com.laowang.entity.User;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import com.laowang.util.EmailUtil;
+import com.laowang.util.Page;
 import com.laowang.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.DateTime;
@@ -277,6 +278,29 @@ public User findByEmail(String email) {
             notify.setState(Notify.NOTIFY_STATE_READ);
             notify.setReadtime(new Timestamp(DateTime.now().getMillis()));
             notifyDao.update(notify);
+        }
+    }
+
+    /**
+     * 查找用户组
+     * @param pageNo
+     * @return
+     */
+    public Page<User> findUserList(Integer pageNo) {
+        Integer count = userDao.count();
+        Page<User> page = new Page<>(count,pageNo);
+        List<User> userList = userDao.FindAllUser(page);
+        page.setItems(userList);
+        return page;
+    }
+
+    public void updateUserState(String userid, Integer userState) {
+        if(StringUtils.isNumeric(userid)){
+            User user = userDao.findByid(Integer.valueOf(userid));
+            user.setState(userState);
+            userDao.update(user);
+        }else{
+            throw new ServiceException("参数异常");
         }
     }
 }

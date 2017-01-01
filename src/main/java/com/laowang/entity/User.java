@@ -29,6 +29,15 @@ public class User {
     private Integer state;
     private Timestamp createtime;
     private String avatar;
+    private LoginLog loginLog;
+
+    public LoginLog getLoginLog() {
+        return loginLog;
+    }
+
+    public void setLoginLog(LoginLog loginLog) {
+        this.loginLog = loginLog;
+    }
 
     public Integer getId() {
         return id;

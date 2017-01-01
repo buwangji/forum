@@ -22,7 +22,12 @@
         <filter-class>com.laowang.web.filter.LoginFilter</filter-class>
         <init-param>
             <param-name>validateUrl</param-name>
-            <param-value>/setting,/newtopic,/topicdetail</param-value>
+            <param-value>/setting,/topicedit,/newtopic,/topicdetail</param-value>
+        </init-param>
+        <init-param>
+            <param-name>validateAdminUrl</param-name>
+            <!-- /setting,/post/new,/notifiy,... -->
+            <param-value>/ad/topic,/ad/home,/ad/user,/ad/node,/ad/nodeUpdate,/ad/nodeDel</param-value>
         </init-param>
     </filter>
     <filter-mapping>

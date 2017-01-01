@@ -1,6 +1,5 @@
 package com.laowang.service;
 
-import com.google.common.collect.Maps;
 import com.laowang.dao.*;
 import com.laowang.entity.*;
 import com.laowang.exception.ServiceException;
@@ -9,7 +8,6 @@ import com.laowang.util.StringUtils;
 import org.joda.time.DateTime;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -182,5 +180,28 @@ public class TopicService {
             throw new ServiceException("该帖已经不可编辑");
         }
 
+    }
+
+    public Node findNodeById(String nodeid) {
+        if(StringUtils.isNumeric(nodeid)){
+            Node node = nodeDao.findById(Integer.valueOf(nodeid));
+            if(node != null){
+                return node;
+            }else{
+                throw new ServiceException("该节点不存在");
+            }
+        }else{
+            throw new ServiceException("参数异常");
+        }
+
+    }
+
+    public Page<TopicReplyCount> getTopicAndReplyNumByDayList(Integer pageNo) {
+        int count = topicDao.countTopicByDay();
+        Page<TopicReplyCount> page = new Page<>(count,pageNo);
+
+        List<TopicReplyCount> countLit =  topicDao.getTopicAndReplyNumList(page.getStart(),page.getPageSize());
+        page.setItems(countLit);
+        return page;
     }
 }

@@ -1,7 +1,12 @@
 package com.laowang.service;
 
 import com.laowang.dao.AdminDao;
+import com.laowang.dao.NodeDao;
+import com.laowang.dao.ReplyDao;
+import com.laowang.dao.TopicDao;
 import com.laowang.entity.Admin;
+import com.laowang.entity.Node;
+import com.laowang.entity.Topic;
 import com.laowang.exception.ServiceException;
 import com.laowang.util.Config;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,6 +19,9 @@ import org.slf4j.LoggerFactory;
 public class AdminService {
     Logger logger = LoggerFactory.getLogger(AdminService.class);
     AdminDao adminDao = new AdminDao();
+    ReplyDao replyDao = new ReplyDao();
+    TopicDao topicDao = new TopicDao();
+    NodeDao nodeDao = new NodeDao();
 
     /**
      * 管理员登录
@@ -32,5 +40,23 @@ public class AdminService {
         }
     }
 
-
+    /**
+     * 根据id删除对应的帖子,包括回复
+     * @param id
+     */
+    public void delTopicById(String id) {
+        //删除帖子的回复
+        replyDao.delByTopicId(id);
+        //更新topicnum
+        Topic topic = topicDao.findTopicById(id);
+        if(topic != null){
+            Node node = nodeDao.findById(topic.getNodeid());
+            node.setTopicnum(node.getTopicnum()-1);
+            nodeDao.update(node);
+            //删除帖子
+            topicDao.delById(id);
+        }else{
+            throw new ServiceException("该帖子不存在或已被删除");
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.kaishengit.entity;
+package com.laowang.entity;
 
 /**
  * Created by jimi_jin on 2016-12-29.

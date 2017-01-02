@@ -145,12 +145,14 @@ public class TopicService {
         List<Topic> topicList = null;
         if(StringUtils.isEmpty(nodeid)){
             count = topicDao.count();
+            count = count ==0?1:count;
             Page<Topic> topicPage = new Page<>(count,pageNo);
             topicList = topicDao.findAllByPage(topicPage.getStart(),topicPage.getPageSize());
             topicPage.setItems(topicList);
             return  topicPage;
         }else{
             count = topicDao.count(nodeid);
+            count = count ==0?1:count;
             Page<Topic> topicPage = new Page<>(count,pageNo);
             topicList = topicDao.findAllByPage(nodeid,topicPage.getStart(),topicPage.getPageSize());
             topicPage.setItems(topicList);

@@ -2,6 +2,9 @@ $(function () {
     $("#regBtn").click(function () {
         $("#regform").submit();
     });
+    $("#password").focus(function () {
+        $("table").show();
+    });
     $("#regform").validate({
         errorElement:'span',
         errorClass:'text-error',

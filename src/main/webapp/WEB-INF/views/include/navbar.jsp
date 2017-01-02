@@ -19,7 +19,7 @@
                 <a href="/newtopic"><i class="fa fa-plus"></i></a>
             </li>
             <li>
-                <a href="notify"><i class="fa fa-bell"></i><span id="unreadcount" class="badge"></span></a>
+                <a href="/notify"><i class="fa fa-bell"></i><span id="unreadcount" class="badge"></span></a>
             </li>
             <li>
                 <a href="/setting"><i class="fa fa-cog"></i></a>

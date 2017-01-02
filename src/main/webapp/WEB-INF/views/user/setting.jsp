@@ -62,7 +62,15 @@
             <div class="control-group">
                 <label class="control-label">新密码</label>
                 <div class="controls">
-                    <input type="password" name="newpassword" id="newpassword">
+                    <input type="password" name="newpassword" id="newpassword" nKeyUp=pwStrength(this.value)
+                           onBlur=pwStrength(this.value)>
+                    <table class="hide">
+                        <tr align="center" bgcolor="#f5f5f5">
+                            <td width="33%" id="strength_L">弱</td>
+                            <td width="33%" id="strength_M">中</td>
+                            <td width="73px" id="strength_H">强</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="control-group">
@@ -115,8 +123,12 @@
 <script src="/static/js/uploader/webuploader.min.js"></script>
 <script src="/static/js/user/setting.js"></script>
 <script src="/static/js/dist/sweetalert.min.js"></script>
+<script src="/static/js/user/password.js"></script>
 <script>
     $(function(){
+        $("#newpassword").focus(function () {
+            $("table").show();
+        });
         //头像上传
         var uploader = WebUploader.create({
             swf:"/static/js/uploader/Uploader.swf",
